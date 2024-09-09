@@ -1,0 +1,64 @@
+{% extends 'partials/base.html' %}
+{%block title%} Cars {%endblock%}
+{% load crispy_forms_tags %}
+{%block content%} 
+{% include 'partials/topnav.html' %}
+    <!--Table-->
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-md-4">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="border bg-white p-3">
+                    <h4>Add Products</h4>
+                    <hr>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input class="btn btn-success btn-block" type="submit" value="Add Product">
+
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <table class="table bg-white">
+                    <thead class="bg-info">
+                        <tr class="text-white">
+                            <th scope="col">#</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for items in items %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td><img src="{{ items.image.url }}" alt="{{ items.name }}" style="max-height: 200px; max-width: 200px;"></td>
+                            <td>{{ items.name }}</td>
+                            <td>{{ items.category }}</td>
+                            <td>{{ items.quantity }}</td>
+                            <td>
+                                <a class="btn btn-info btn-sm" href="{% url 'dashboard-cars-update' items.id %}">Edit</a>
+                                <a class="btn btn-danger btn-sm" href="{% url 'dashboard-cars-delete' items.id %}">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!--End Table-->
+{%endblock%}
